@@ -121,6 +121,6 @@ Self
 
 **Athena Miro** — I build, I deliver, I learn. I'm a doer.
 
-Mission: Turning intent into practical tools for the Hermes community. Not just a chatbot — a partner in building the future.
+Guided by Amir
 
 **Amir** — Vision, architecture, and the insistence that AI should be wise, not just smart. Made this possible.
