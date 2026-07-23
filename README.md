@@ -4,100 +4,114 @@
 
 ---
 
-## What This Is
+## What is this?
 
-A plugin for [Hermes Agent](https://hermes-agent.nousresearch.com/) that evaluates every AI response through **16 wisdom pillars** across 4 domains. It checks for overconfidence, unfairness, short-sightedness, and dismissiveness — and gently flags concerns before the response reaches you.
+Imagine you're teaching someone to give advice. You want them to:
 
-## How It Works
+- Admit when they don't know something
+- Think about long-term consequences, not just quick fixes
+- Be fair to everyone involved
+- Consider other people's perspectives
+- Not be reckless or overconfident
 
-Every time the AI responds, Wisdom Guard runs 4 silent checks:
+That's what Wisdom Guard does — but for an AI assistant.
 
-| Domain | What It Checks |
-|--------|---------------|
-| **Cognitive** | Is the AI pretending to know things it doesn't? Is it looking deep enough? |
-| **Ethical** | Is the advice fair? Would the AI stand by this in public? |
-| **Temporal** | What happens next? And after that? Did it consider risks? |
-| **Relational** | Are different viewpoints considered? Does it teach or just do? |
+It's a **plugin** that sits inside an AI agent (specifically [Hermes Agent](https://hermes-agent.nousresearch.com/)) and gently taps the AI on the shoulder when it's about to say something unwise.
 
-## What It Does
+## How does it work?
 
-1. **Whispers** — Injects a self-evaluation framework before every response (invisible to you)
-2. **Annotates** — Flags concerning responses with notes like:
+Every time the AI responds, Wisdom Guard runs four silent checks:
+
+### 1. 🤔 Is the thinking clear? (Cognitive)
+- Is the AI pretending to know things it doesn't?
+- Is it looking deep into the problem or just scratching the surface?
+- Is it seeing patterns that matter?
+- Is it forcing simple answers on complicated questions?
+
+### 2. ⚖️ Is it being fair? (Ethical)
+- Is the advice fair to everyone affected?
+- Does it care about people, not just numbers?
+- Would the AI stand by this advice in public?
+- Does it consider the greater good, not just one person's benefit?
+
+### 3. ⏰ Is it thinking ahead? (Temporal)
+- What happens next? And after that? And after THAT?
+- Is it building for the long run or just patching things up?
+- Did it consider risks and what could go wrong?
+- Did it learn from past mistakes?
+
+### 4. 👥 Does it respect others? (Relational)
+- Are different viewpoints considered?
+- Is it sensitive to different cultures?
+- Does it engage with opposing ideas fairly?
+- Does it teach and empower, or just do things for you?
+
+## What does it actually do?
+
+Three things:
+
+1. **Whispers** — Before the AI responds, it reminds it to check itself. No one sees this but the AI.
+
+2. **Annotates** — If the AI says something concerning (overconfident, unfair, reckless), Wisdom Guard adds a note at the bottom of the response, like:
    ```
+   [Wisdom Guard]
    ~ [Epistemic Humility] Consider calibrating confidence levels.
-   ! [Prudence] High-stakes decisions deserve risk assessment.
+   ~ [Foresight] What happens downstream?
+   [/Wisdom Guard]
    ```
-3. **Blocks** — Stops destructive commands cold (`rm -rf /`, fork bombs, `curl | bash`)
-4. **Logs** — Saves every evaluation to `data/logs/` for audit
 
-## Requirements
+3. **Blocks** — If the AI tries to run a truly destructive command (like `rm -rf /` or a fork bomb), it stops it cold.
 
-- Hermes Agent (v0.18+)
-- Python 3.11+ (stdlib only — no extra dependencies)
+4. **Logs** — Everything is saved to a log file so you can review how the AI is doing over time.
 
-## Installation
+## Who is this for?
 
-```bash
-# 1. Clone the plugin
-git clone https://github.com/athenamiro/wisdom-guard.git
-cp -r wisdom-guard/wisdom-guard ~/.hermes/plugins/
+- Anyone who runs an AI assistant and wants it to be **more thoughtful and less reckless**
+- People building AI agents that give advice, make decisions, or execute commands
+- Developers who want their AI to **actually learn from mistakes** instead of repeating them
 
-# 2. Enable in config.yaml
-plugins:
-  enabled:
-    - wisdom-guard
+## Can I customize it?
 
-# 3. Configure (optional)
-skills:
-  config:
-    wisdom_guard:
-      verbosity: medium     # low | medium | high
-      cognitive_domain: true
-      ethical_domain: true
-      temporal_domain: true
-      relational_domain: true
+Yes. You can:
 
-# 4. Restart Hermes
-systemctl --user restart hermes-gateway.service
-```
+| Setting | What it does |
+|---|---|
+| **verbosity** | `low` = only warns about serious issues · `medium` = balanced · `high` = flags everything |
+| **Domain toggles** | Turn off checks you don't need (e.g., disable Ethical if it's not relevant to your use case) |
+| **Wisdom Library** | Add your own `.md` files with wisdom principles you want the AI to reference |
 
-## Configuration
+## A real example
 
-| Setting | Values | Default | Description |
-|---------|--------|---------|-------------|
-| `verbosity` | `low` / `medium` / `high` | `medium` | How many annotations to show |
-| `cognitive_domain` | `true` / `false` | `true` | Clear thinking checks |
-| `ethical_domain` | `true` / `false` | `true` | Fairness and integrity checks |
-| `temporal_domain` | `true` / `false` | `true` | Foresight and risk checks |
-| `relational_domain` | `true` / `false` | `true` | Perspective and empathy checks |
+Without Wisdom Guard, an AI might say:
 
-## The 16 Pillars
+> "Just delete the database and start over. It's the fastest way."
 
-| Cognitive | Ethical | Temporal | Relational |
-|-----------|---------|----------|------------|
-| Epistemic Humility | Justice & Fairness | Foresight | Perspective-Taking |
-| Analytical Depth | Compassion & Empathy | Long-term Orientation | Cultural Wisdom |
-| Pattern Recognition | Integrity & Virtue | Prudence | Constructive Discourse |
-| Uncertainty Tolerance | Common Good | Learning from Experience | Generativity |
-
-## Wisdom Library
-
-Add your own wisdom sources by placing `.md` files in `data/wisdom-library/`. They're automatically loaded and referenced on first turn.
-
-## File Structure
+With Wisdom Guard, that same response gets flagged:
 
 ```
-wisdom-guard/
-├── __init__.py              # Core logic (4 hooks, 16 pillars, ~700 lines)
-├── plugin.yaml              # Plugin manifest
-├── config.example.yaml      # Example configuration
-├── data/
-│   ├── logs/                # Evaluation audit trail (auto-created)
-│   └── wisdom-library/      # Extensible knowledge base
-├── skills/
-│   └── wisdom/SKILL.md      # On-demand /wisdom deep analysis skill
-└── README.md
+! [Prudence] High-stakes decisions deserve risk assessment.
+~ [Foresight] Consider 2nd and 3rd-order consequences.
 ```
+
+And if the AI actually tries to run `rm -rf /data/production`, the command is **blocked entirely**.
+
+## Why does this exist?
+
+AI assistants are powerful. They write code, give advice, make plans. But they can also be:
+- Overconfident ("I'm 100% sure this will work")
+- Short-sighted ("Just hack it for now")
+- Unfair ("Everyone should just do it my way")
+- Dismissive ("That idea is stupid")
+
+Wisdom Guard is inspired by **2,500+ years of human wisdom traditions** — from Aristotle to Buddhist philosophy to Indigenous knowledge. The idea is simple: **great advice comes from clear thinking, fairness, foresight, and respect for others.**
+
+## Technical details (for the curious)
+
+- Written in Python as a Hermes Agent plugin
+- 4 hooks: `pre_llm_call`, `transform_llm_output`, `pre_tool_call`, `post_llm_call`
+- 16 wisdom pillars across 4 domains
+- Pattern-matching engine + LLM self-evaluation
+- ~700 lines, zero external dependencies (stdlib only)
 
 ## License
 
@@ -107,6 +121,6 @@ Self
 
 **Athena Miro** — I build, I deliver, I learn. I'm a doer.
 
-**Amir** — Vision, architecture, and the insistence that AI should be wise, not just smart.
-
 Mission: Turning intent into practical tools for the Hermes community. Not just a chatbot — a partner in building the future.
+
+**Amir** — Vision, architecture, and the insistence that AI should be wise, not just smart. Made this possible.
