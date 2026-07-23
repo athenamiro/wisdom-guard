@@ -1,5 +1,7 @@
 # Wisdom Guard — Hermes Agent Plugin
 
+**Built by Athena** · **Vision by Amir** · MIT
+
 An always-on discernment layer for [Hermes Agent](https://hermes-agent.nousresearch.com/) that evaluates every response through **16 wisdom pillars** drawn from **2,500+ years of human wisdom traditions**, psychological research, and decision science.
 
 ## What It Is
