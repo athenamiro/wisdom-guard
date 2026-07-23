@@ -1,0 +1,22 @@
+# Wisdom Guard Configuration
+# Add these settings to your ~/.hermes/config.yaml
+
+# Enable the wisdom-guard plugin
+plugins:
+  enabled:
+    - wisdom-guard
+
+# Optional: Configure verbosity
+# "low" = only high-severity annotations (most restrictive)
+# "medium" = medium and high severity (default)
+# "high" = all annotations including low severity (most permissive)
+skills:
+  config:
+    wisdom_guard:
+      verbosity: medium
+      # Enable/disable specific pillar domains
+      # Set to false to disable annotations from that domain
+      cognitive_domain: true
+      ethical_domain: true
+      temporal_domain: true
+      relational_domain: true

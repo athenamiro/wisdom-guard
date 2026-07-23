@@ -1,0 +1,7 @@
+name: wisdom-guard
+version: "1.2"
+description: >
+  Always-on wisdom guard for Hermes Agent. Evaluates every response through
+  16 wisdom pillars across 4 domains (Cognitive, Ethical, Temporal, Relational).
+  Appends advisory annotations when wisdom concerns are detected. Optionally
+  blocks reckless tool calls. Includes a /wisdom skill for on-demand deep analysis.
