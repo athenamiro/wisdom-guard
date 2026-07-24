@@ -647,7 +647,7 @@ def _register_wisdom_skill(ctx):
     skill_path = _SKILL_DIR / "SKILL.md"
     if skill_path.exists():
         try:
-            ctx.register_skill("wisdom", str(_SKILL_DIR))
+            ctx.register_skill("wisdom", _SKILL_DIR)
             logger.info("wisdom-guard: registered /wisdom skill")
         except Exception as e:
             logger.warning("wisdom-guard: failed to register /wisdom skill: %s", e)
@@ -664,7 +664,7 @@ def _load_config(ctx):
         cfg = ctx.get_config("skills.config.wisdom_guard") or {}
     except Exception:
         cfg = {}
-    raw = cfg.get("verbosity") or cfg.get("sensitivity", "medium")
+    raw = cfg.get("verbosity") or cfg.get("sensitivity", "low")
     val = str(raw).lower().strip()
     if val in ("low", "medium", "high"):
         _VERBOSITY = val
